@@ -32,7 +32,7 @@ export async function _installTool(): Promise<string>{
 
   const installDestinationDir = IS_WINDOWS ? 'C:\\PROGRA~1\\Amazon\\AWSCLI' : path.join(path.parse(filePath).dir, '.local', 'lib', 'aws')
   const installArgs: string[] = IS_WINDOWS ? ['/install', '/quiet', '/norestart'] : ['-i', installDestinationDir]
-  try{
+  /*try{
     await tool.installPackage(filePath, installArgs)
   }catch (err){
     console.log(err)
@@ -46,7 +46,8 @@ export async function _installTool(): Promise<string>{
   const toolCachePath = await tool.cacheTool(installedBinary, logFile)
   await addPath(toolCachePath)
 
-  return toolCachePath
+  return toolCachePath*/
+  return ''
 }
 
 if (process.env.NODE_ENV != 'test') (async () => await _installTool())()
