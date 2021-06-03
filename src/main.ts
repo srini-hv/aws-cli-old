@@ -38,7 +38,7 @@ export async function _installTool(): Promise<string>{
   
   const logFile =  path.normalize(path.join(path.parse(filePath).dir, 'log.txt'))
   const toolCachePath = await tool.cacheTool(installedBinary, logFile)
-  await addPath(toolCachePath)
+  // await addPath(toolCachePath)
 
   return toolCachePath
 }

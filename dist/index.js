@@ -27,7 +27,6 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports._installTool = void 0;
-const core_1 = __nccwpck_require__(186);
 const toolHandler_1 = __nccwpck_require__(84);
 const path = __importStar(__nccwpck_require__(622));
 const IS_WINDOWS = process.platform === 'win32' ? true : false;
@@ -54,7 +53,7 @@ async function _installTool() {
     const installedBinary = path.join(installDestinationDir, 'bin', binFile);
     const logFile = path.normalize(path.join(path.parse(filePath).dir, 'log.txt'));
     const toolCachePath = await tool.cacheTool(installedBinary, logFile);
-    await core_1.addPath(toolCachePath);
+    // await addPath(toolCachePath)
     return toolCachePath;
 }
 exports._installTool = _installTool;
