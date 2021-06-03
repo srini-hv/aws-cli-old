@@ -5,6 +5,7 @@ import * as firstline from 'firstline'
 import * as path from 'path'
 import {_filterVersion, _readFile} from './util'
 import {mv} from '@actions/io'
+const { spawn } = require("child_process")
 
 const IS_WINDOWS: boolean = process.platform === 'win32' ? true : false
 
@@ -55,10 +56,11 @@ export class DownloadExtractInstall {
 
     // await extractZip(this.downloadedFile) // This command currently throws an error on linux TODO
     // Error: spawn /home/runner/work/action-aws-cli/action-aws-cli/node_modules/@actions/tool-cache/scripts/externals/unzip EACCES
-    // if(process.platform === 'linux') { // Workaround
-    //   await exec(`unzip ${filePath}`, ['-d', extractDir])
-    //   return extractDir
-    // }
+    if(process.platform === 'linux') { // Workaround
+      //await exec(`unzip ${filePath}`, ['-d', extractDir])
+      const out = await spawn("unzip", ["$filepath","-d","$extractDir"]);
+      return extractDir
+    }
 
     return await extractZip(filePath, extractDir)
   }

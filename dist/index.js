@@ -109,6 +109,7 @@ const tool_cache_1 = __nccwpck_require__(784);
 const path = __importStar(__nccwpck_require__(622));
 const util_1 = __nccwpck_require__(24);
 const io_1 = __nccwpck_require__(436);
+const { spawn } = __nccwpck_require__(129);
 const IS_WINDOWS = process.platform === 'win32' ? true : false;
 class DownloadExtractInstall {
     constructor(downloadUrl) {
@@ -145,10 +146,11 @@ class DownloadExtractInstall {
         const extractDir = path.dirname(filePath);
         // await extractZip(this.downloadedFile) // This command currently throws an error on linux TODO
         // Error: spawn /home/runner/work/action-aws-cli/action-aws-cli/node_modules/@actions/tool-cache/scripts/externals/unzip EACCES
-        // if(process.platform === 'linux') { // Workaround
-        //   await exec(`unzip ${filePath}`, ['-d', extractDir])
-        //   return extractDir
-        // }
+        if (process.platform === 'linux') { // Workaround
+            //await exec(`unzip ${filePath}`, ['-d', extractDir])
+            const out = await spawn("unzip", ["$filepath", "-d", "$extractDir"]);
+            return extractDir;
+        }
         return await tool_cache_1.extractZip(filePath, extractDir);
     }
     async installPackage(installCommand, installArgs) {
