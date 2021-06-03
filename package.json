@@ -5,7 +5,7 @@
   "description": "Installs AWS cli",
   "main": "lib/main.js",
   "scripts": {
-    "build": "tsc",
+    "build": "tsc && ncc build",
     "test": "jest --coverage",
     "format": "eslint --fix './src/*.ts'; eslint --fix './tests/*.ts'",
     "publish": "branch=$(git rev-parse --symbolic-full-name --abbrev-ref HEAD); if [[ $branch == \"master\" ]]; then npm run-script \"change-branch\"; else npm run-script \"create-publish\"; fi;",
@@ -30,7 +30,9 @@
     "@actions/io": "^1.0.0",
     "@actions/tool-cache": "^1.0.0",
     "firstline": "^2.0.2",
-    "semver": "^6.1.1"
+    "ncc": "^0.3.6",
+    "semver": "^6.1.1",
+    "tsc": "^2.0.3"
   },
   "devDependencies": {
     "@types/jest": "^24.0.13",
@@ -44,6 +46,7 @@
     "jest-circus": "^24.7.1",
     "nock": "^10.0.6",
     "ts-jest": "^24.0.2",
-    "typescript": "^3.5.1"
+    "typescript": "^3.9.9",
+    "@vercel/ncc": "^0.28.5"
   }
 }
