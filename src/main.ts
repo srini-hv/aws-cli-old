@@ -8,7 +8,7 @@ const IS_WINDOWS: boolean = process.platform === 'win32' ? true : false
 
 export async function _installTool(): Promise<string>{
   
-  const downloadUrl = IS_WINDOWS ? 'https://s3.amazonaws.com/aws-cli/AWSCLISetup.exe' : 'https://s3.amazonaws.com/aws-cli/awscli-bundle.zip'
+  const downloadUrl = IS_WINDOWS ? 'https://s3.amazonaws.com/aws-cli/AWSCLISetup.exe' : 'https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip'
   const tool = new DownloadExtractInstall(downloadUrl)
 
   // const toolPath: string = find('aws', '*')
