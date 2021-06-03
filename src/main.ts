@@ -35,7 +35,9 @@ export async function _installTool(): Promise<string>{
   try{
     await tool.installPackage(filePath, installArgs)
   }catch (err){
+    console.log(err)
     debug(err)
+    process.exit(1)
   }
   const binFile = IS_WINDOWS ? 'aws.exe' : 'aws'
   const installedBinary = path.join(installDestinationDir, 'bin', binFile)
