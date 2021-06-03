@@ -27,47 +27,36 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports._installTool = void 0;
+const core_1 = __nccwpck_require__(186);
 const toolHandler_1 = __nccwpck_require__(84);
 const path = __importStar(__nccwpck_require__(622));
 const IS_WINDOWS = process.platform === 'win32' ? true : false;
 async function _installTool() {
-    const downloadUrl = IS_WINDOWS ? 'https://s3.amazonaws.com/aws-cli/AWSCLISetup.exe' : 'https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip';
+    const downloadUrl = IS_WINDOWS ? 'https://s3.amazonaws.com/aws-cli/AWSCLISetup.exe' : 'https://s3.amazonaws.com/aws-cli/awscli-bundle.zip';
     const tool = new toolHandler_1.DownloadExtractInstall(downloadUrl);
-    // const toolPath: string = find('aws', '*')
-    // if (toolPath) return toolPath
-    // const awsPath: string = await which('aws', true)
-    // if (awsPath) {
-    //   const toolCachePath = await tool.cacheTool(awsPath, path.join(path.parse(awsPath).dir, 'log.txt'))
-    //   console.log(awsPath)
-    //   return toolCachePath
-    // }
-    let filePath = await tool.downloadFile();
-    if (path.parse(filePath).ext === '.zip') {
-        const extractedPath = await tool.extractFile(filePath);
-        filePath = path.join(extractedPath, 'awscli-bundle', 'install');
+    const isInstalled = await tool.isAlreadyInstalled('aws');
+    if (typeof isInstalled === 'string') {
+        console.log('Already installed but ignoring', isInstalled);
+        // TODO Figure out what is best to do when already found
+        // return isInstalled
     }
-    const installDestinationDir = IS_WINDOWS ? 'C:\\PROGRA~1\\Amazon\\AWSCLI' : path.join(path.parse(filePath).dir, '.local', 'lib', 'aws');
+    let installFilePath = await tool.downloadFile();
+    const rootPath = path.parse(installFilePath).dir;
+    const installDestinationDir = IS_WINDOWS ? 'C:\\PROGRA~1\\Amazon\\AWSCLI' : path.join(rootPath, '.local', 'lib', 'aws');
     const installArgs = IS_WINDOWS ? ['/install', '/quiet', '/norestart'] : ['-i', installDestinationDir];
-    /*try{
-      await tool.installPackage(filePath, installArgs)
-    }catch (err){
-      console.log(err)
-      debug(err)
-      process.exit(1)
+    const binFile = IS_WINDOWS ? 'aws.exe' : 'aws';
+    const installedBinary = path.join(installDestinationDir, 'bin', binFile);
+    if (path.parse(installFilePath).ext === '.zip') {
+        const extractedPath = await tool.extractFile(installFilePath);
+        installFilePath = path.join(extractedPath, 'awscli-bundle', 'install');
     }
-    const binFile = IS_WINDOWS ? 'aws.exe' : 'aws'
-    const installedBinary = path.join(installDestinationDir, 'bin', binFile)
-    
-    const logFile =  path.normalize(path.join(path.parse(filePath).dir, 'log.txt'))
-    const toolCachePath = await tool.cacheTool(installedBinary, logFile)
-    await addPath(toolCachePath)
-  
-    return toolCachePath*/
-    return '';
+    await tool.installPackage(installFilePath, installArgs);
+    const toolCachePath = await tool.cacheTool(installedBinary);
+    await core_1.addPath(toolCachePath);
+    return toolCachePath;
 }
 exports._installTool = _installTool;
-if (process.env.NODE_ENV != 'test')
-    (async () => await _installTool())();
+// if (process.env.NODE_ENV != 'test') (async () => await _installTool())()
 //# sourceMappingURL=main.js.map
 
 /***/ }),
@@ -100,40 +89,66 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.DownloadExtractInstall = void 0;
 const exec_1 = __nccwpck_require__(514);
 const tool_cache_1 = __nccwpck_require__(784);
+const io_1 = __nccwpck_require__(436);
 const path = __importStar(__nccwpck_require__(622));
 const util_1 = __nccwpck_require__(24);
-const io_1 = __nccwpck_require__(436);
-const { spawn } = __nccwpck_require__(129);
+const io_2 = __nccwpck_require__(436);
 const IS_WINDOWS = process.platform === 'win32' ? true : false;
 class DownloadExtractInstall {
     constructor(downloadUrl) {
         this.downloadUrl = downloadUrl;
         this.fileType = this.downloadUrl.substr(-4);
     }
-    async _getCommandOutput(command, args, logFile) {
+    async isAlreadyInstalled(toolName) {
+        const cachePath = await tool_cache_1.find(toolName, '*');
+        const systemPath = await io_1.which(toolName);
+        if (cachePath)
+            return cachePath;
+        if (systemPath) {
+            // return await this.cacheTool(systemPath) // TODO Better logic for cache addition
+            return systemPath;
+        }
+        return false;
+    }
+    async _getVersion(installedBinary) {
+        const versionCommandOutput = await this._getCommandOutput(installedBinary, ['--version']);
+        const installedVersion = util_1._filterVersion(versionCommandOutput);
+        return installedVersion;
+    }
+    async _getCommandOutput(commandStr, args) {
+        const logFile = path.join(__dirname, 'log.txt');
         let stdErr = '';
+        let stdOut = '';
         const options = {
             windowsVerbatimArguments: false,
             listeners: {
                 stderr: (data) => {
                     stdErr += data.toString();
+                },
+                stdout: (data) => {
+                    stdOut += data.toString();
                 }
             }
         };
-        if (IS_WINDOWS)
-            command = `cmd /c ${command}`;
-        await exec_1.exec(command, args, options);
-        return IS_WINDOWS ? await util_1._readFile(logFile, {}) : stdErr;
-    }
-    async _getVersion(installedBinary, logFile) {
-        const versionCommandOutput = IS_WINDOWS ? await this._getCommandOutput(`${installedBinary} --version > ${logFile}`, [], logFile) : await this._getCommandOutput(installedBinary, ['--version'], logFile);
-        const installedVersion = util_1._filterVersion(versionCommandOutput);
-        return installedVersion;
+        if (IS_WINDOWS) {
+            args.push('>', logFile);
+            args.unshift(commandStr);
+            args.unshift('/c');
+            commandStr = 'cmd';
+            await exec_1.exec(commandStr, args, options);
+            return await util_1._readFile(logFile, {});
+        }
+        else {
+            await exec_1.exec(commandStr, args, options);
+            if (stdOut === '')
+                return stdErr;
+            return stdOut;
+        }
     }
     async downloadFile() {
         const filePath = await tool_cache_1.downloadTool(this.downloadUrl);
         const destPath = `${filePath}${this.fileType}`;
-        await io_1.mv(filePath, destPath);
+        await io_2.mv(filePath, destPath);
         return destPath;
     }
     async extractFile(filePath) {
@@ -141,18 +156,16 @@ class DownloadExtractInstall {
         // await extractZip(this.downloadedFile) // This command currently throws an error on linux TODO
         // Error: spawn /home/runner/work/action-aws-cli/action-aws-cli/node_modules/@actions/tool-cache/scripts/externals/unzip EACCES
         if (process.platform === 'linux') { // Workaround
-            //await exec(`unzip ${filePath}`, ['-d', extractDir])
-            const out = await spawn("unzip", [filePath, "-d", extractDir]);
+            await exec_1.exec(`unzip ${filePath}`, ['-d', extractDir]);
             return extractDir;
         }
         return await tool_cache_1.extractZip(filePath, extractDir);
     }
     async installPackage(installCommand, installArgs) {
-        //return await exec(installCommand, installArgs)
-        return await spawn(installCommand, installArgs);
+        return await exec_1.exec(installCommand, installArgs);
     }
-    async cacheTool(installedBinary, logFile) {
-        const installedVersion = await this._getVersion(installedBinary, logFile);
+    async cacheTool(installedBinary) {
+        const installedVersion = await this._getVersion(installedBinary);
         const cachedPath = await tool_cache_1.cacheDir(path.parse(installedBinary).dir, 'aws', installedVersion);
         return cachedPath;
     }

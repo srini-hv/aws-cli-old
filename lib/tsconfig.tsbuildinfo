@@ -136,16 +136,6 @@
         "signature": "89bf2b7a601b73ea4311eda9c41f86a58994fec1bee3b87c4a14d68d9adcdcbd",
         "affectsGlobalScope": true
       },
-      "../node_modules/@actions/tool-cache/lib/tool-cache.d.ts": {
-        "version": "559a30140f295e83f80448b2594cd32e7ab111b4259802acce83f931b9334d54",
-        "signature": "559a30140f295e83f80448b2594cd32e7ab111b4259802acce83f931b9334d54",
-        "affectsGlobalScope": false
-      },
-      "../node_modules/@actions/io/lib/io.d.ts": {
-        "version": "64a800488a8eff719ada17f68d3262d753b6c9a4f69a8cd7da8e045fc31dc9cb",
-        "signature": "64a800488a8eff719ada17f68d3262d753b6c9a4f69a8cd7da8e045fc31dc9cb",
-        "affectsGlobalScope": false
-      },
       "../node_modules/@actions/core/lib/core.d.ts": {
         "version": "ca1354da75d89061045a74d2d66fcc8f7f3f16460e5f86394e573ac7b20de923",
         "signature": "ca1354da75d89061045a74d2d66fcc8f7f3f16460e5f86394e573ac7b20de923",
@@ -381,28 +371,28 @@
         "signature": "183b8c244df531f05187c569dd0e942a90967333d90200682158f7115d7bdf0b",
         "affectsGlobalScope": false
       },
+      "../node_modules/@actions/tool-cache/lib/tool-cache.d.ts": {
+        "version": "559a30140f295e83f80448b2594cd32e7ab111b4259802acce83f931b9334d54",
+        "signature": "559a30140f295e83f80448b2594cd32e7ab111b4259802acce83f931b9334d54",
+        "affectsGlobalScope": false
+      },
+      "../node_modules/@actions/io/lib/io.d.ts": {
+        "version": "64a800488a8eff719ada17f68d3262d753b6c9a4f69a8cd7da8e045fc31dc9cb",
+        "signature": "64a800488a8eff719ada17f68d3262d753b6c9a4f69a8cd7da8e045fc31dc9cb",
+        "affectsGlobalScope": false
+      },
       "../src/util.ts": {
         "version": "56a7d67991e5793e09cdae021224dbbb9bf695d3cd054b98b3f0fa78a4826604",
         "signature": "4e1a5e02e6b1c120661a5e47a844c82ee152e946911868b7ccb3d009a2bd3450",
         "affectsGlobalScope": false
       },
       "../src/toolHandler.ts": {
-        "version": "0b523869175b0c287b295cde1efd243edd5ac83c14e9289d4bf5c09103043107",
-        "signature": "a86361dff92626babff14ac8ccf0d16510baf5c455641b1140dc64acea9b87a5",
-        "affectsGlobalScope": false
-      },
-      "../node_modules/@types/yargs-parser/index.d.ts": {
-        "version": "7b48555954a556ad80cc5fda89473d339f570eeac7a7b4d99c88ff5e646c24f7",
-        "signature": "7b48555954a556ad80cc5fda89473d339f570eeac7a7b4d99c88ff5e646c24f7",
-        "affectsGlobalScope": false
-      },
-      "../node_modules/@types/yargs/index.d.ts": {
-        "version": "6f15cf4b24659aa2b9f957dc0b4254b89f35a77978f9da1f161587b66ef75663",
-        "signature": "6f15cf4b24659aa2b9f957dc0b4254b89f35a77978f9da1f161587b66ef75663",
+        "version": "0502e297fc787e678dc06a739a6e0648270e95befb1a9be64d270c02c2bbb0ef",
+        "signature": "f570853d290afa811fd520a475923bc4ce2a93466f6b9ffe4919e5482eea9f68",
         "affectsGlobalScope": false
       },
       "../src/main.ts": {
-        "version": "78047826294f8fd4ef650bed82a4449fc972eabcdd78b3ddb536902fd95b86df",
+        "version": "c907da165b0d5e63bb95f9928009bbee2227f85e46647e40bd668feea4820900",
         "signature": "692adc3bd4886b1e5179e80521b81eeec7e4e2aa14f31ab2fecfe97ef100c876",
         "affectsGlobalScope": false
       },
@@ -494,6 +484,16 @@
       "../node_modules/@types/stack-utils/index.d.ts": {
         "version": "41422586881bcd739b4e62d9b91cd29909f8572aa3e3cdf316b7c50f14708d49",
         "signature": "41422586881bcd739b4e62d9b91cd29909f8572aa3e3cdf316b7c50f14708d49",
+        "affectsGlobalScope": false
+      },
+      "../node_modules/@types/yargs-parser/index.d.ts": {
+        "version": "7b48555954a556ad80cc5fda89473d339f570eeac7a7b4d99c88ff5e646c24f7",
+        "signature": "7b48555954a556ad80cc5fda89473d339f570eeac7a7b4d99c88ff5e646c24f7",
+        "affectsGlobalScope": false
+      },
+      "../node_modules/@types/yargs/index.d.ts": {
+        "version": "6f15cf4b24659aa2b9f957dc0b4254b89f35a77978f9da1f161587b66ef75663",
+        "signature": "6f15cf4b24659aa2b9f957dc0b4254b89f35a77978f9da1f161587b66ef75663",
         "affectsGlobalScope": false
       }
     },
@@ -1021,12 +1021,9 @@
       ],
       "../src/main.ts": [
         "../node_modules/@actions/core/lib/core.d.ts",
-        "../node_modules/@actions/io/lib/io.d.ts",
-        "../node_modules/@actions/tool-cache/lib/tool-cache.d.ts",
         "../node_modules/@types/node/path.d.ts",
         "../node_modules/@types/node/ts3.2/util.d.ts",
         "../node_modules/@types/node/util.d.ts",
-        "../node_modules/@types/yargs/index.d.ts",
         "../src/toolHandler.ts"
       ],
       "../src/toolHandler.ts": [
