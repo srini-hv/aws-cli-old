@@ -387,7 +387,7 @@
         "affectsGlobalScope": false
       },
       "../src/toolHandler.ts": {
-        "version": "a1b4e237b89223f96cd839b969790a5a6245dfcac35a25e7623106110c526532",
+        "version": "414dcabb283cbd437282dcb8b61f165ad159a16def7f195f2961b733a1de8eb0",
         "signature": "a86361dff92626babff14ac8ccf0d16510baf5c455641b1140dc64acea9b87a5",
         "affectsGlobalScope": false
       },

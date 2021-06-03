@@ -55,10 +55,10 @@ export class DownloadExtractInstall {
 
     // await extractZip(this.downloadedFile) // This command currently throws an error on linux TODO
     // Error: spawn /home/runner/work/action-aws-cli/action-aws-cli/node_modules/@actions/tool-cache/scripts/externals/unzip EACCES
-    if(process.platform === 'linux') { // Workaround
-      await exec(`unzip ${filePath}`, ['-d', extractDir])
-      return extractDir
-    }
+    // if(process.platform === 'linux') { // Workaround
+    //   await exec(`unzip ${filePath}`, ['-d', extractDir])
+    //   return extractDir
+    // }
 
     return await extractZip(filePath, extractDir)
   }
