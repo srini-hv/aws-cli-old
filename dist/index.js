@@ -44,15 +44,8 @@ async function _installTool() {
     // }
     let filePath = await tool.downloadFile();
     if (path.parse(filePath).ext === '.zip') {
-        try {
-            const extractedPath = await tool.extractFile(filePath);
-            filePath = path.join(extractedPath, 'awscli-bundle', 'install');
-        }
-        catch (err) {
-            console.log(err);
-            core_1.debug(err);
-            process.exit(1);
-        }
+        const extractedPath = await tool.extractFile(filePath);
+        filePath = path.join(extractedPath, 'awscli-bundle', 'install');
     }
     const installDestinationDir = IS_WINDOWS ? 'C:\\PROGRA~1\\Amazon\\AWSCLI' : path.join(path.parse(filePath).dir, '.local', 'lib', 'aws');
     const installArgs = IS_WINDOWS ? ['/install', '/quiet', '/norestart'] : ['-i', installDestinationDir];
@@ -148,13 +141,14 @@ class DownloadExtractInstall {
         // Error: spawn /home/runner/work/action-aws-cli/action-aws-cli/node_modules/@actions/tool-cache/scripts/externals/unzip EACCES
         if (process.platform === 'linux') { // Workaround
             //await exec(`unzip ${filePath}`, ['-d', extractDir])
-            const out = await spawn("unzip", ["$filepath", "-d", "$extractDir"]);
+            const out = await spawn("unzip", [filePath, "-d", extractDir]);
             return extractDir;
         }
         return await tool_cache_1.extractZip(filePath, extractDir);
     }
     async installPackage(installCommand, installArgs) {
-        return await exec_1.exec(installCommand, installArgs);
+        //return await exec(installCommand, installArgs)
+        return await spawn(installCommand, installArgs);
     }
     async cacheTool(installedBinary, logFile) {
         const installedVersion = await this._getVersion(installedBinary, logFile);

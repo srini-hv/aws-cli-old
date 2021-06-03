@@ -26,14 +26,8 @@ export async function _installTool(): Promise<string>{
   let filePath = await tool.downloadFile()
 
   if (path.parse(filePath).ext === '.zip') {
-    try{
-      const extractedPath = await tool.extractFile(filePath)
-      filePath = path.join(extractedPath, 'awscli-bundle', 'install')
-    }catch (err){
-      console.log(err)
-      debug(err)
-      process.exit(1)
-      }  
+    const extractedPath = await tool.extractFile(filePath)
+    filePath = path.join(extractedPath, 'awscli-bundle', 'install')
   }
 
   const installDestinationDir = IS_WINDOWS ? 'C:\\PROGRA~1\\Amazon\\AWSCLI' : path.join(path.parse(filePath).dir, '.local', 'lib', 'aws')

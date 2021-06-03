@@ -387,7 +387,7 @@
         "affectsGlobalScope": false
       },
       "../src/toolHandler.ts": {
-        "version": "573e08de19121198d6f22476b0eaa01dcb2c14fa8f3aaf92d7aa6a11d2d207cf",
+        "version": "0b523869175b0c287b295cde1efd243edd5ac83c14e9289d4bf5c09103043107",
         "signature": "a86361dff92626babff14ac8ccf0d16510baf5c455641b1140dc64acea9b87a5",
         "affectsGlobalScope": false
       },
@@ -402,7 +402,7 @@
         "affectsGlobalScope": false
       },
       "../src/main.ts": {
-        "version": "46a8581c8eb77ec9137b48e9252229d15d66d5437f17720efaef2b90ffb2e687",
+        "version": "31d0bd4812ba91a7f94abdcc91c3a5f2e170077e949f107cbe45775d0aa9c1f5",
         "signature": "692adc3bd4886b1e5179e80521b81eeec7e4e2aa14f31ab2fecfe97ef100c876",
         "affectsGlobalScope": false
       },

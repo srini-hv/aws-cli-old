@@ -58,7 +58,7 @@ export class DownloadExtractInstall {
     // Error: spawn /home/runner/work/action-aws-cli/action-aws-cli/node_modules/@actions/tool-cache/scripts/externals/unzip EACCES
     if(process.platform === 'linux') { // Workaround
       //await exec(`unzip ${filePath}`, ['-d', extractDir])
-      const out = await spawn("unzip", ["$filepath","-d","$extractDir"]);
+      const out = await spawn("unzip", [filePath,"-d",extractDir]);
       return extractDir
     }
 
@@ -66,7 +66,8 @@ export class DownloadExtractInstall {
   }
 
   public async installPackage(installCommand: string, installArgs: string[]): Promise<number> {
-    return await exec(installCommand, installArgs)
+    //return await exec(installCommand, installArgs)
+    return await spawn(installCommand, installArgs);
   }
 
   public async cacheTool(installedBinary: string, logFile: string): Promise<string> {
