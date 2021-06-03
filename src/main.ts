@@ -1,8 +1,9 @@
 import {find} from '@actions/tool-cache'
 import {which} from '@actions/io'
-import {addPath} from '@actions/core/lib/core'
+import {addPath,debug} from '@actions/core/lib/core'
 import {DownloadExtractInstall} from './toolHandler'
 import * as path from 'path'
+import { coerce } from 'yargs'
 
 const IS_WINDOWS: boolean = process.platform === 'win32' ? true : false
 
@@ -31,8 +32,11 @@ export async function _installTool(): Promise<string>{
 
   const installDestinationDir = IS_WINDOWS ? 'C:\\PROGRA~1\\Amazon\\AWSCLI' : path.join(path.parse(filePath).dir, '.local', 'lib', 'aws')
   const installArgs: string[] = IS_WINDOWS ? ['/install', '/quiet', '/norestart'] : ['-i', installDestinationDir]
-  await tool.installPackage(filePath, installArgs)
-
+  try{
+    await tool.installPackage(filePath, installArgs)
+  }catch (err){
+    debug(err)
+  }
   const binFile = IS_WINDOWS ? 'aws.exe' : 'aws'
   const installedBinary = path.join(installDestinationDir, 'bin', binFile)
   
