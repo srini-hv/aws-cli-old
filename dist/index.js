@@ -27,6 +27,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports._installTool = void 0;
+const core_1 = __nccwpck_require__(186);
 const toolHandler_1 = __nccwpck_require__(84);
 const path = __importStar(__nccwpck_require__(622));
 const IS_WINDOWS = process.platform === 'win32' ? true : false;
@@ -48,7 +49,12 @@ async function _installTool() {
     }
     const installDestinationDir = IS_WINDOWS ? 'C:\\PROGRA~1\\Amazon\\AWSCLI' : path.join(path.parse(filePath).dir, '.local', 'lib', 'aws');
     const installArgs = IS_WINDOWS ? ['/install', '/quiet', '/norestart'] : ['-i', installDestinationDir];
-    await tool.installPackage(filePath, installArgs);
+    try {
+        await tool.installPackage(filePath, installArgs);
+    }
+    catch (err) {
+        core_1.debug(err);
+    }
     const binFile = IS_WINDOWS ? 'aws.exe' : 'aws';
     const installedBinary = path.join(installDestinationDir, 'bin', binFile);
     const logFile = path.normalize(path.join(path.parse(filePath).dir, 'log.txt'));
