@@ -1,0 +1,23 @@
+name: "master builds"
+on:
+  push:
+    branches:
+      - master
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [macOS-10.14, windows-2016, ubuntu-18.04]
+    steps:
+    - uses: actions/setup-node@v1
+    - uses: actions/checkout@v1
+
+    - name: "npm i"
+      run: npm i
+
+    - name: "npm run build"
+      run: npm run build
+
+    - name: "npm run test"
+      run: npm run test
